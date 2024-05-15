@@ -25,9 +25,10 @@ main {
 }
 
 .notes_container {
-  background-color: black;
+  /* background-color: lightgrey; */
   height: 100vh;
 }
+
 #notes_list {
   padding: 30px;
   margin: 0;

@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   addNote.addEventListener("click", () => {
     noteEditor.style.display = "block";
     saveNote.style.display = "block";
+    addNote.style.display = "none";
   });
 
   saveNote.addEventListener("click", () => {
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       noteEditor.value = "";
       noteEditor.style.display = "none";
       saveNote.style.display = "none";
+      addNote.style.display = "block";
     }
   });
 });
