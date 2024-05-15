@@ -18,3 +18,31 @@ body {
 h1 {
   font-size: 38px;
 }
+
+main {
+  display: flex;
+  height: 100%;
+}
+
+.notes_container {
+  background-color: black;
+  height: 100vh;
+}
+#notes_list {
+  padding: 30px;
+  margin: 0;
+}
+
+#notes_list li {
+  padding: 10px;
+  background: white;
+}
+
+.note_editor_container {
+  padding: 20px;
+}
+
+#note_editor {
+  width: 300px;
+  height: 200px;
+}
