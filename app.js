@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveNote = document.getElementById("save_note");
   const noteList = document.getElementById("notes_list");
 
+  loadNotes();
+
   addNote.addEventListener("click", () => {
     noteEditor.style.display = "block";
     saveNote.style.display = "block";
@@ -20,6 +22,32 @@ document.addEventListener("DOMContentLoaded", () => {
       noteEditor.style.display = "none";
       saveNote.style.display = "none";
       addNote.style.display = "block";
+
+      saveToLocalStorage(noteText);
     }
   });
+
+  function saveToLocalStorage(note) {
+    let notes = localStorage.getItem("notes");
+    if (!notes) {
+      notes = [];
+    } else {
+      notes = JSON.parse(notes);
+    }
+    notes.push(note);
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }
+
+  function loadNotes() {
+    const notes = localStorage.getItem("notes");
+    if (notes) {
+      const parsedNotes = JSON.parse(notes);
+      noteList.innerHTML = "";
+      parsedNotes.forEach((note) => {
+        const li = document.createElement("li");
+        li.textContent = note;
+        noteList.appendChild(li);
+      });
+    }
+  }
 });
