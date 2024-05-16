@@ -4,28 +4,39 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveNote = document.getElementById("save_note");
   const noteList = document.getElementById("notes_list");
 
-  loadNotes();
+  if (noteList) {
+    loadNotes();
+  }
 
-  addNote.addEventListener("click", () => {
-    noteEditor.style.display = "block";
-    saveNote.style.display = "block";
-    addNote.style.display = "none";
-  });
+  if (addNote) {
+    addNote.addEventListener("click", () => {
+      if (noteEditor) noteEditor.style.display = "block";
+      if (saveNote) saveNote.style.display = "block";
+      addNote.style.display = "none";
+    });
+  }
 
-  saveNote.addEventListener("click", () => {
-    const noteText = noteEditor.value.trim();
-    if (noteText !== "") {
-      const li = document.createElement("li");
-      li.textContent = noteText;
-      noteList.appendChild(li);
-      noteEditor.value = "";
-      noteEditor.style.display = "none";
-      saveNote.style.display = "none";
-      addNote.style.display = "block";
+  if (saveNote) {
+    saveNote.addEventListener("click", () => {
+      if (noteEditor) {
+        const noteText = noteEditor.value.trim();
+        if (noteText !== "") {
+          const uniqId = new Date().toISOString();
+          const note = { text: noteText, id: uniqId };
 
-      saveToLocalStorage(noteText);
-    }
-  });
+          const li = document.createElement("li");
+          li.textContent = `${note.text} ${note.id}`;
+          if (noteList) noteList.appendChild(li);
+          noteEditor.value = "";
+          noteEditor.style.display = "none";
+          saveNote.style.display = "none";
+          if (addNote) addNote.style.display = "block";
+
+          saveToLocalStorage(note);
+        }
+      }
+    });
+  }
 
   function saveToLocalStorage(note) {
     let notes = localStorage.getItem("notes");
@@ -45,7 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
       noteList.innerHTML = "";
       parsedNotes.forEach((note) => {
         const li = document.createElement("li");
-        li.textContent = note;
+        li.textContent = `${note.text} ${note.id}`;
+        li.addEventListener("click", () => {
+          window.location.href = `detail.html?id=${note.id}`;
+        });
         noteList.appendChild(li);
       });
     }
