@@ -30,7 +30,11 @@ h1 {
   color: grey;
 }
 
-#notes_list {
+li {
+  margin-bottom: 20px;
   background-color: azure;
+}
+
+#notes_list {
   cursor: pointer;
 }
