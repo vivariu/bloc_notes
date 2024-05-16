@@ -1,0 +1,23 @@
+body {
+  margin: auto;
+}
+
+.note_editor_container {
+  height: 100;
+  width: 300;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+}
+
+textarea {
+  padding: 20px;
+  resize: none;
+  width: 250px;
+  height: 400px;
+  border-radius: 10px;
+  background-color: azure;
+}

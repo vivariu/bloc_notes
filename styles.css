@@ -29,12 +29,3 @@ h1 {
   font-size: 32px;
   color: grey;
 }
-
-textarea {
-  padding: 20px;
-  resize: none;
-  width: 250px;
-  height: 400px;
-  background-color: azure;
-  border-radius: 10px;
-}
