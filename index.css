@@ -29,3 +29,8 @@ h1 {
   font-size: 32px;
   color: grey;
 }
+
+#notes_list {
+  background-color: azure;
+  cursor: pointer;
+}
