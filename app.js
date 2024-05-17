@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (noteEditor) {
         const noteText = noteEditor.value.trim();
         if (noteText !== "") {
-          const uniqId = new Date().toISOString();
+          const uniqId = Math.floor(Date.now() / 1000);
           const note = { text: noteText, id: uniqId };
 
           const li = document.createElement("li");
@@ -57,7 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
       parsedNotes.forEach((note) => {
         const li = document.createElement("li");
         li.textContent = `${note.text} ${note.id}`;
-        li.addEventListener("click", () => {
+        li.addEventListener("click", (event) => {
+          event.preventDefault();
           window.location.href = `detail.html?id=${note.id}`;
         });
         noteList.appendChild(li);
