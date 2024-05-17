@@ -38,6 +38,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (window) {
+    const url = new URL(location.href);
+    const id = url.searchParams.get("id");
+    if (id) {
+      loadNoteById(id);
+    }
+  }
+
+  function loadNoteById(id) {
+    const notes = localStorage.getItem("notes");
+    if (notes) {
+      const parsedNotes = JSON.parse(notes);
+      const note = parsedNotes.find((note) => note.id == id);
+      if (noteEditor) {
+        noteEditor.value = note.text;
+        noteEditor.style.display = "block";
+        saveNote.style.display = "block";
+      }
+    }
+  }
+
   function saveToLocalStorage(note) {
     let notes = localStorage.getItem("notes");
     if (!notes) {
