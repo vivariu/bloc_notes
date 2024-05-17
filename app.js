@@ -65,12 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function saveNoteById(id, newText) {
+  function saveNoteById(id, noteText) {
     const notes = localStorage.getItem("notes");
     if (notes) {
       const parsedNotes = JSON.parse(notes);
       const noteId = parsedNotes.findIndex((note) => note.id == id);
-      parsedNotes[noteId].text = newText;
+      parsedNotes[noteId].text = noteText;
       localStorage.setItem("notes", JSON.stringify(parsedNotes));
     }
   }
