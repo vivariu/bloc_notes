@@ -20,19 +20,25 @@ document.addEventListener("DOMContentLoaded", () => {
     saveNote.addEventListener("click", () => {
       if (noteEditor) {
         const noteText = noteEditor.value.trim();
-        if (noteText !== "") {
-          const uniqId = Math.floor(Date.now() / 1000);
-          const note = { text: noteText, id: uniqId };
+        const url = new URL(location.href);
+        const id = url.searchParams.get("id");
 
-          const li = document.createElement("li");
-          li.textContent = `${note.text} ${note.id}`;
-          if (noteList) noteList.appendChild(li);
+        if (noteText !== "") {
+          if (id) {
+            saveNoteById(id, noteText);
+          } else {
+            const uniqId = Math.floor(Date.now() / 1000);
+            const note = { text: noteText, id: uniqId };
+            saveToLocalStorage(note);
+            const li = document.createElement("li");
+            li.textContent = `${note.text} ${note.id}`;
+            if (noteList) noteList.appendChild(li);
+          }
+
           noteEditor.value = "";
           noteEditor.style.display = "none";
           saveNote.style.display = "none";
           if (addNote) addNote.style.display = "block";
-
-          saveToLocalStorage(note);
         }
       }
     });
@@ -51,11 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (notes) {
       const parsedNotes = JSON.parse(notes);
       const note = parsedNotes.find((note) => note.id == id);
-      if (noteEditor) {
+      if (noteEditor && note) {
         noteEditor.value = note.text;
         noteEditor.style.display = "block";
         saveNote.style.display = "block";
       }
+    }
+  }
+
+  function saveNoteById(id, newText) {
+    const notes = localStorage.getItem("notes");
+    if (notes) {
+      const parsedNotes = JSON.parse(notes);
+      const noteId = parsedNotes.findIndex((note) => note.id == id);
+      parsedNotes[noteId].text = newText;
+      localStorage.setItem("notes", JSON.stringify(parsedNotes));
     }
   }
 
