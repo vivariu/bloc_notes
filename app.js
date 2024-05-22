@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getNotesFromLocalStorage() {
-    return JSON.parse(localStorage.getItem("notes")) || {};
+    return JSON.parse(localStorage.getItem("notes"));
   }
 
   function setNotesToLocalStorage(notes) {
@@ -26,14 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loadNotes(notes) {
     noteList.innerHTML = "";
-    for (let id in notes) {
-      const li = createNoteList(notes[id]);
+    notes.forEach((note) => {
+      const li = createNoteList(note);
       noteList.appendChild(li);
-    }
+    });
   }
 
   function loadNoteById(notes, id) {
-    const note = notes[id];
+    const note = notes.find((note) => note.id == id);
     if (title && noteEditor && note) {
       title.value = note.title;
       noteEditor.value = note.text;
@@ -41,8 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveNoteById(id, titleText, noteText) {
-    allNotes[id].title = titleText;
-    allNotes[id].text = noteText;
+    let noteIndex = allNotes.findIndex((note) => note.id == id);
+    allNotes[noteIndex].title = titleText;
+    allNotes[noteIndex].text = noteText;
     setNotesToLocalStorage(allNotes);
   }
 
@@ -58,7 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function deleteNoteById(id) {
-    delete allNotes[id];
+    allNotes = allNotes.filter((note) => note.id != id);
+    setNotesToLocalStorage(allNotes);
     loadNotes(allNotes);
   }
 
