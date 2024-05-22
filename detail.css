@@ -9,33 +9,55 @@ body {
 }
 
 .note_editor_container {
-  width: 300px;
-  margin-top: 5vh;
-  display: flex;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 50vh;
+  justify-content: flex-start;
+  width: 80%;
+  max-width: 400px;
+  height: 80%;
+  max-height: 400px;
+  max-height: 80vh;
+  background-color: azure;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  color: black;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 textarea {
+  position: absolute;
   justify-content: flex-start;
   padding: 20px;
   resize: none;
+  bottom: 15%;
   width: 250px;
-  height: 400px;
+  height: 500px;
   border-radius: 10px;
   background-color: azure;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
 }
 
 input {
+  visibility: hidden;
   resize: none;
-  width: 260 px;
-  height: 20px;
+  width: 100px;
+  height: 5px;
   border-radius: 5px;
   background-color: azure;
+  border: none;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+#save_note {
+  position: absolute;
+  right: 40%;
+  background-color: azure;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  border-radius: 10%;
+  border: lightgray;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: medium;
 }
