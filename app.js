@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const noteList = document.getElementById("notes_list");
   const title = document.getElementById("title");
 
-  let allNotes = getNotesFromLocalStorage();
+  let allNotes = getNotesFromLocalStorage(); // !!
 
   if (noteList) {
     loadNotes(allNotes);
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getNotesFromLocalStorage() {
-    return JSON.parse(localStorage.getItem("notes"));
+    return JSON.parse(localStorage.getItem("notes")) || {};
   }
 
   function setNotesToLocalStorage(notes) {
@@ -26,14 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loadNotes(notes) {
     noteList.innerHTML = "";
-    notes.forEach((note) => {
-      const li = createNoteListItem(note);
+    for (let id in notes) {
+      const li = createNoteList(notes[id]);
       noteList.appendChild(li);
-    });
+    }
   }
 
   function loadNoteById(notes, id) {
-    const note = notes.find((note) => note.id == id);
+    const note = notes[id];
     if (title && noteEditor && note) {
       title.value = note.title;
       noteEditor.value = note.text;
@@ -41,9 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveNoteById(id, titleText, noteText) {
-    let noteIndex = allNotes.findIndex((note) => note.id == id);
-    allNotes[noteIndex].title = titleText;
-    allNotes[noteIndex].text = noteText;
+    allNotes[id].title = titleText;
+    allNotes[id].text = noteText;
     setNotesToLocalStorage(allNotes);
   }
 
@@ -59,12 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function deleteNoteById(id) {
-    allNotes = allNotes.filter((note) => note.id != id);
-    setNotesToLocalStorage(allNotes);
+    delete allNotes[id];
     loadNotes(allNotes);
   }
 
-  function createNoteListItem(note) {
+  function createNoteList(note) {
     const li = document.createElement("li");
     const deleteButton = createDeleteButton(note.id);
     const saveText = note.title
@@ -84,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (saveNote) {
+    // crée la fonction
     saveNote.addEventListener("click", () => {
       if (title && noteEditor) {
         const titleText = title.value.trim();
