@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const noteList = document.getElementById("notes_list");
   const title = document.getElementById("title");
 
-  let allNotes = getNotesFromLocalStorage(); // !!
+  let allNotes = getNotesFromLocalStorage();
 
   if (noteList) {
     loadNotes(allNotes);
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getNotesFromLocalStorage() {
-    return JSON.parse(localStorage.getItem("notes"));
+    return JSON.parse(localStorage.getItem("notes")) || {};
   }
 
   function setNotesToLocalStorage(notes) {
@@ -26,14 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loadNotes(notes) {
     noteList.innerHTML = "";
-    notes.forEach((note) => {
+    Object.values(notes).forEach((note) => {
       const li = createNoteList(note);
       noteList.appendChild(li);
     });
   }
 
   function loadNoteById(notes, id) {
-    const note = notes.find((note) => note.id == id);
+    const note = notes[id];
     if (title && noteEditor && note) {
       title.value = note.title;
       noteEditor.value = note.text;
@@ -41,9 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveNoteById(id, titleText, noteText) {
-    let noteIndex = allNotes.findIndex((note) => note.id == id);
-    allNotes[noteIndex].title = titleText;
-    allNotes[noteIndex].text = noteText;
+    allNotes[id].title = titleText;
+    allNotes[id].text = noteText;
     setNotesToLocalStorage(allNotes);
   }
 
@@ -59,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function deleteNoteById(id) {
-    allNotes = allNotes.filter((note) => note.id != id);
+    delete allNotes[id];
     setNotesToLocalStorage(allNotes);
     loadNotes(allNotes);
   }
@@ -79,12 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveToLocalStorage(note) {
-    allNotes.push(note);
+    const uniqId = Math.floor(Date.now() / 1000);
+    allNotes[uniqId] = note;
     setNotesToLocalStorage(allNotes);
   }
 
   if (saveNote) {
-    // crée la fonction
     saveNote.addEventListener("click", () => {
       if (title && noteEditor) {
         const titleText = title.value.trim();
@@ -95,8 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (id) {
             saveNoteById(id, titleText, noteText);
           } else {
-            const uniqId = Math.floor(Date.now() / 1000);
-            const note = { id: uniqId, title: titleText, text: noteText };
+            const note = { title: titleText, text: noteText };
             saveToLocalStorage(note);
             loadNotes(allNotes);
           }
