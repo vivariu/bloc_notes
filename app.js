@@ -26,10 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loadNotes(notes) {
     noteList.innerHTML = "";
-    Object.values(notes).forEach((note) => {
+    for (const id in notes) {
+      const note = notes[id];
       const li = createNoteList(note);
       noteList.appendChild(li);
-    });
+    }
   }
 
   function loadNoteById(notes, id) {
@@ -41,8 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveNoteById(id, titleText, noteText) {
-    allNotes[id].title = titleText;
-    allNotes[id].text = noteText;
+    for (const noteId in allNotes) {
+      if (noteId == id) {
+        allNotes[noteId].title = titleText;
+        allNotes[noteId].text = noteText;
+        break;
+      }
+    }
     setNotesToLocalStorage(allNotes);
   }
 
@@ -58,7 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function deleteNoteById(id) {
-    delete allNotes[id];
+    const updatedNotes = {};
+    for (const noteId in allNotes) {
+      if (noteId != id) {
+        updatedNotes[noteId] = allNotes[noteId];
+      }
+    }
+    allNotes = updatedNotes;
     setNotesToLocalStorage(allNotes);
     loadNotes(allNotes);
   }
