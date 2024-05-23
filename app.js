@@ -5,9 +5,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const title = document.getElementById("title");
 
   let allNotes = getNotesFromLocalStorage();
+  console.log(allNotes);
 
   if (noteList) {
     loadNotes(allNotes);
+  }
+
+  if (saveNote) {
+    saveNote.addEventListener("click", SaveNote);
   }
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -26,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loadNotes(notes) {
     noteList.innerHTML = "";
-    for (const id in notes) {
+    for (let id in notes) {
       const note = notes[id];
       const li = createNoteList(note);
       noteList.appendChild(li);
@@ -34,7 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadNoteById(notes, id) {
-    const note = notes[id];
+    let note;
+    for (const id in notes) {
+      note = notes[id];
+      console.log("note", note);
+    }
     if (title && noteEditor && note) {
       title.value = note.title;
       noteEditor.value = note.text;
@@ -42,10 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveNoteById(id, titleText, noteText) {
-    for (const noteId in allNotes) {
+    for (let noteId in allNotes) {
       if (noteId == id) {
         allNotes[noteId].title = titleText;
         allNotes[noteId].text = noteText;
+
         break;
       }
     }
@@ -65,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function deleteNoteById(id) {
     const updatedNotes = {};
-    for (const noteId in allNotes) {
+    for (let noteId in allNotes) {
       if (noteId != id) {
         updatedNotes[noteId] = allNotes[noteId];
       }
@@ -95,23 +105,22 @@ document.addEventListener("DOMContentLoaded", () => {
     setNotesToLocalStorage(allNotes);
   }
 
-  if (saveNote) {
-    saveNote.addEventListener("click", () => {
-      if (title && noteEditor) {
-        const titleText = title.value.trim();
-        const noteText = noteEditor.value.trim();
-        const id = urlParams.get("id");
+  function SaveNote() {
+    if (title && noteEditor) {
+      const titleText = title.value.trim();
+      const noteText = noteEditor.value.trim();
+      const id = urlParams.get("id");
 
-        if (titleText || noteText) {
-          if (id) {
-            saveNoteById(id, titleText, noteText);
-          } else {
-            const note = { title: titleText, text: noteText };
-            saveToLocalStorage(note);
-            loadNotes(allNotes);
-          }
+      if (titleText || noteText) {
+        if (id) {
+          saveNoteById(id, titleText, noteText);
+        } else {
+          const uniqId = Math.floor(Date.now() / 1000);
+          const note = { id: uniqId, title: titleText, text: noteText };
+          saveToLocalStorage(note);
+          loadNotes(allNotes);
         }
       }
-    });
+    }
   }
 });
