@@ -37,6 +37,7 @@ textarea {
   border-radius: 10px;
   background-color: azure;
   overflow-y: auto;
+  outline: none;
 }
 
 input {
