@@ -38,12 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function loadNoteById(notes, id) {
+  function getNoteById(notes, id) {
     let note;
-    for (const id in notes) {
-      note = notes[id];
-      console.log("note", note);
+    for (const noteIndex in notes) {
+      if (notes[noteIndex].id == id) {
+        note = notes[noteIndex];
+        return note;
+      }
     }
+    return {};
+  }
+
+  function loadNoteById(notes, id) {
+    const note = getNoteById(notes, id);
     if (title && noteEditor && note) {
       title.value = note.title;
       noteEditor.value = note.text;
