@@ -5,11 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const noteList = document.getElementById("notes_list");
   const title = document.getElementById("title");
 
-  let allNotes = getNotesFromLocalStorage();
-  console.log(allNotes);
+  let allNotes = null;
+
+  function getNotes() {
+    if (allNotes === null) {
+      allNotes = JSON.parse(localStorage.getItem("notes")) || {};
+    }
+    return allNotes;
+  }
+
+  function setNotesToLocalStorage(notes) {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }
 
   if (noteList) {
-    loadNotes(allNotes);
+    loadNotes(getNotes());
   }
 
   if (addNote) {
@@ -26,15 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const noteId = urlParams.get("id");
   if (noteId) {
-    loadNoteById(allNotes, noteId);
-  }
-
-  function getNotesFromLocalStorage() {
-    return JSON.parse(localStorage.getItem("notes")) || {};
-  }
-
-  function setNotesToLocalStorage(notes) {
-    localStorage.setItem("notes", JSON.stringify(notes));
+    loadNoteById(getNotes(), noteId);
   }
 
   function loadNotes(notes) {
@@ -59,10 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveNoteById(id, titleText, noteText) {
-    allNotes[id].title = titleText;
-    allNotes[id].text = noteText;
+    const notes = getNotes();
+    notes[id].title = titleText;
+    notes[id].text = noteText;
+    setNotesToLocalStorage(notes);
     window.location.href = "index.html";
-    setNotesToLocalStorage(allNotes);
   }
 
   function createDeleteButton(id) {
@@ -77,9 +80,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function deleteNoteById(id) {
-    delete allNotes[id];
-    setNotesToLocalStorage(allNotes);
-    loadNotes(allNotes);
+    const notes = getNotes();
+    delete notes[id];
+    setNotesToLocalStorage(notes);
+    loadNotes(notes);
   }
 
   function createNoteList(note) {
@@ -97,13 +101,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveToLocalStorage(note) {
+    const notes = getNotes();
     const uniqId = Math.floor(Date.now() / 1000);
-    allNotes[uniqId] = note;
-    if (addNote) addNote.style.display = "block";
+    note.id = uniqId;
+    notes[uniqId] = note;
+    setNotesToLocalStorage(notes);
     window.location.href = "index.html";
-    title.value = "";
-    noteEditor.value = "";
-    setNotesToLocalStorage(allNotes);
+    if (title) title.value = "";
+    if (noteEditor) noteEditor.value = "";
+    loadNotes(notes);
   }
 
   function SaveNote() {
@@ -114,20 +120,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (titleText == "" && noteText == "") {
         window.location.href = "index.html";
       }
-      if (titleText == "" && noteText == "") {
-        if (id) {
-          deleteNoteById(id, titleText, noteText);
-        }
+      if (id && titleText == "" && noteText == "") {
+        deleteNoteById(id);
       }
 
       if (titleText || noteText) {
         if (id) {
           saveNoteById(id, titleText, noteText);
         } else {
-          const uniqId = Math.floor(Date.now() / 1000);
-          const note = { id: uniqId, title: titleText, text: noteText };
+          const note = { title: titleText, text: noteText };
           saveToLocalStorage(note);
-          loadNotes(allNotes);
         }
       }
     }
