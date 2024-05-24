@@ -21,7 +21,6 @@
       <main>
         <div class="notes_container">
           <ul id="notes_list"></ul>
-          <a href="detail.html"><button id="add_note">+</button></a>
         </div>
         <div class="note_editor_container">
           <input id="title" type="text" placeholder="title" />
@@ -29,13 +28,14 @@
             id="note_editor"
             placeholder="_______________________________ _______________________________ _______________________________ _______________________________ _______________________________"
           ></textarea>
-          <a href="index.html"
-            ><button onclick="saveNote()" id="save_note">OK</button></a
-          >
+
+          <button onclick="saveNote()" id="save_note">OK</button>
         </div>
       </main>
+      <footer>
+        <button id="add_note">+</button>
+      </footer>
     </div>
-
-    <script src="test2.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

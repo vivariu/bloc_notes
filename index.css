@@ -102,10 +102,21 @@ li {
   font-size: large;
   border: none;
   cursor: pointer;
-
   border-radius: 50%;
   background-color: white;
-
   padding: 5px;
   margin-left: 10px;
 }
+
+/* footer {
+  background-color: #728ca6;
+  color: white;
+  height: 50%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  width: 100%;
+} */

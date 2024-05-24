@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const addNote = document.getElementById("add_note");
   const noteEditor = document.getElementById("note_editor");
   const saveNote = document.getElementById("save_note");
   const noteList = document.getElementById("notes_list");
@@ -9,6 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (noteList) {
     loadNotes(allNotes);
+  }
+
+  if (addNote) {
+    addNote.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.location.href = "detail.html";
+    });
   }
 
   if (saveNote) {
@@ -39,14 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getNoteById(notes, id) {
-    let note;
-    for (let noteIndex in notes) {
-      if (notes[noteIndex].id == id) {
-        note = notes[noteIndex];
-        return note;
-      }
-    }
-    return {};
+    return notes[id];
   }
 
   function loadNoteById(notes, id) {
@@ -58,14 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveNoteById(id, titleText, noteText) {
-    for (let noteId in allNotes) {
-      if (noteId == id) {
-        allNotes[noteId].title = titleText;
-        allNotes[noteId].text = noteText;
-
-        break;
-      }
-    }
+    allNotes[id].title = titleText;
+    allNotes[id].text = noteText;
+    window.location.href = "index.html";
     setNotesToLocalStorage(allNotes);
   }
 
@@ -81,13 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function deleteNoteById(id) {
-    const updatedNotes = {};
-    for (let noteId in allNotes) {
-      if (noteId != id) {
-        updatedNotes[noteId] = allNotes[noteId];
-      }
-    }
-    allNotes = updatedNotes;
+    delete allNotes[id];
     setNotesToLocalStorage(allNotes);
     loadNotes(allNotes);
   }
@@ -109,6 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function saveToLocalStorage(note) {
     const uniqId = Math.floor(Date.now() / 1000);
     allNotes[uniqId] = note;
+    if (addNote) addNote.style.display = "block";
+    window.location.href = "index.html";
+    title.value = "";
+    noteEditor.value = "";
     setNotesToLocalStorage(allNotes);
   }
 
@@ -117,6 +111,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const titleText = title.value.trim();
       const noteText = noteEditor.value.trim();
       const id = urlParams.get("id");
+      if (titleText == "" && noteText == "") {
+        window.location.href = "index.html";
+      }
+      if (titleText == "" && noteText == "") {
+        if (id) {
+          deleteNoteById(id, titleText, noteText);
+        }
+      }
 
       if (titleText || noteText) {
         if (id) {
