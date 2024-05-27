@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     li.textContent = saveText;
     li.addEventListener("click", () => {
       editNoteId = note.id;
-      showEditor();
       loadNoteById(getNotes(), note.id);
     });
     li.appendChild(deleteButton);
@@ -77,20 +76,15 @@ document.addEventListener("DOMContentLoaded", () => {
     notes[id].title = titleText;
     notes[id].text = noteText;
     setNotesToLocalStorage(notes);
-    hideEditor();
     loadNotes(notes);
   }
 
   function saveToLocalStorage(note) {
-    if (note.title.trim() === "" && note.text.trim() === "") {
-      return;
-    }
     const notes = getNotes();
     const uniqId = Math.floor(Date.now() / 1000);
     note.id = uniqId;
     notes[uniqId] = note;
     setNotesToLocalStorage(notes);
-    hideEditor();
     loadNotes(notes);
   }
 
@@ -100,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const noteText = noteEditor.value.trim();
       if (titleText == "" && noteText == "") {
         hideEditor();
+        return;
       }
       if (editNoteId) {
         if (titleText == "" && noteText == "") {
@@ -114,21 +109,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function showEditor() {
-    notesContainer.style.display = "none";
-    noteEditorContainer.style.display = "block";
-  }
-
-  function hideEditor() {
-    notesContainer.style.display = "block";
-    noteEditorContainer.style.display = "none";
-  }
-
   if (addNote) {
     addNote.addEventListener("click", (event) => {
       event.preventDefault();
       editNoteId = null;
-      showEditor();
       title.value = "";
       noteEditor.value = "";
     });
@@ -137,6 +121,16 @@ document.addEventListener("DOMContentLoaded", () => {
   if (saveNote) {
     saveNote.addEventListener("click", SaveNote);
   }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const liElements = document.querySelectorAll("#notes_list li");
+
+    liElements.forEach((li) => {
+      li.addEventListener("click", () => {
+        li.style.color = "red";
+      });
+    });
+  });
 
   loadNotes(getNotes());
 });
