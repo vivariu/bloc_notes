@@ -1,11 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
   const addNote = document.getElementById("add_note");
-  const noteEditor = document.getElementById("note_editor");
+  const noteEditorContainer = document.getElementById("note_editor_container");
+  const notesContainer = document.getElementById("notes_container");
   const saveNote = document.getElementById("save_note");
   const noteList = document.getElementById("notes_list");
   const title = document.getElementById("title");
+  const noteEditor = document.getElementById("note_editor");
 
   let allNotes = null;
+  editNoteId = null;
 
   function getNotes() {
     if (allNotes === null) {
@@ -18,27 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }
 
-  if (noteList) {
-    loadNotes(getNotes());
-  }
-
-  if (addNote) {
-    addNote.addEventListener("click", (event) => {
-      event.preventDefault();
-      window.location.href = "detail.html";
-    });
-  }
-
-  if (saveNote) {
-    saveNote.addEventListener("click", SaveNote);
-  }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const noteId = urlParams.get("id");
-  if (noteId) {
-    loadNoteById(getNotes(), noteId);
-  }
-
   function loadNotes(notes) {
     noteList.innerHTML = "";
     for (let id in notes) {
@@ -48,24 +30,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function getNoteById(notes, id) {
-    return notes[id];
-  }
-
-  function loadNoteById(notes, id) {
-    const note = getNoteById(notes, id);
-    if (title && noteEditor && note) {
-      title.value = note.title;
-      noteEditor.value = note.text;
-    }
-  }
-
-  function saveNoteById(id, titleText, noteText) {
-    const notes = getNotes();
-    notes[id].title = titleText;
-    notes[id].text = noteText;
-    setNotesToLocalStorage(notes);
-    window.location.href = "index.html";
+  function createNoteList(note) {
+    const li = document.createElement("li");
+    const deleteButton = createDeleteButton(note.id);
+    const saveText = note.title
+      ? note.title
+      : note.text.split(" ").slice(0, 3).join(" ");
+    li.textContent = saveText;
+    li.appendChild(deleteButton);
+    li.addEventListener("click", () => {
+      editingNoteId = note.id;
+      showEditor();
+      loadNoteById(getNotes(), note.id);
+    });
+    return li;
   }
 
   function createDeleteButton(id) {
@@ -86,18 +64,21 @@ document.addEventListener("DOMContentLoaded", () => {
     loadNotes(notes);
   }
 
-  function createNoteList(note) {
-    const li = document.createElement("li");
-    const deleteButton = createDeleteButton(note.id);
-    const saveText = note.title
-      ? note.title
-      : note.text.split(" ").slice(0, 3).join(" ");
-    li.textContent = saveText;
-    li.addEventListener("click", () => {
-      window.location.href = `detail.html?id=${note.id}`;
-    });
-    li.appendChild(deleteButton);
-    return li;
+  function loadNoteById(notes, id) {
+    const note = notes[id];
+    if (title && noteEditor && note) {
+      title.value = note.title;
+      noteEditor.value = note.text;
+    }
+  }
+
+  function saveNoteById(id, titleText, noteText) {
+    const notes = getNotes();
+    notes[id].title = titleText;
+    notes[id].text = noteText;
+    setNotesToLocalStorage(notes);
+    hideEditor();
+    loadNotes(notes);
   }
 
   function saveToLocalStorage(note) {
@@ -106,9 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     note.id = uniqId;
     notes[uniqId] = note;
     setNotesToLocalStorage(notes);
-    window.location.href = "index.html";
-    if (title) title.value = "";
-    if (noteEditor) noteEditor.value = "";
+    hideEditor();
     loadNotes(notes);
   }
 
@@ -116,22 +95,46 @@ document.addEventListener("DOMContentLoaded", () => {
     if (title && noteEditor) {
       const titleText = title.value.trim();
       const noteText = noteEditor.value.trim();
-      const id = urlParams.get("id");
       if (titleText == "" && noteText == "") {
-        window.location.href = "index.html";
+        hideEditor();
+        return;
       }
-      if (id && titleText == "" && noteText == "") {
-        deleteNoteById(id);
-      }
-
-      if (titleText || noteText) {
-        if (id) {
-          saveNoteById(id, titleText, noteText);
+      if (editingNoteId) {
+        if (titleText == "" && noteText == "") {
+          deleteNoteById(editingNoteId);
         } else {
-          const note = { title: titleText, text: noteText };
-          saveToLocalStorage(note);
+          saveNoteById(editingNoteId, titleText, noteText);
         }
+      } else {
+        const note = { title: titleText, text: noteText };
+        saveToLocalStorage(note);
       }
     }
   }
+
+  function showEditor() {
+    notesContainer.style.display = "none";
+    noteEditorContainer.style.display = "block";
+  }
+
+  function hideEditor() {
+    notesContainer.style.display = "block";
+    noteEditorContainer.style.display = "none";
+  }
+
+  if (addNote) {
+    addNote.addEventListener("click", (event) => {
+      event.preventDefault();
+      editNoteId = null;
+      showEditor();
+      title.value = "";
+      noteEditor.value = "";
+    });
+  }
+
+  if (saveNote) {
+    saveNote.addEventListener("click", SaveNote);
+  }
+
+  loadNotes(getNotes());
 });

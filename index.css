@@ -1,6 +1,6 @@
 body {
   margin: auto;
-  font-family: "Jakarta", "Arial", "sans-serif";
+  font-family: "Plus Jakarta Sans", Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,21 +8,13 @@ body {
   background-color: #f0f0f0;
 }
 
-#title,
-#note_editor,
-#save_note {
-  display: none;
-}
-
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   width: 80%;
   max-width: 400px;
   height: 80%;
-  max-height: 400px;
   max-height: 80vh;
   background-color: azure;
   border-radius: 20px;
@@ -32,23 +24,21 @@ body {
   overflow-y: auto;
 }
 
-.note {
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 h1 {
   font-size: 32px;
   color: grey;
   font-weight: 400;
 }
 
+#notes_container {
+  width: 100%;
+}
+
 #notes_list {
-  cursor: pointer;
   width: 100%;
   list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 #notes_list li {
@@ -62,10 +52,20 @@ h1 {
   scroll-behavior: auto;
 }
 
+.delete-button {
+  font-size: large;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: white;
+  padding: 5px;
+  margin-left: 10px;
+}
+
 #add_note {
   position: absolute;
   bottom: 80px;
-  right: 38%;
+  right: calc(50% - 25px);
   background-color: black;
   color: white;
   border: none;
@@ -84,39 +84,42 @@ h1 {
   background-color: grey;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.delete-button {
-  font-size: large;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  background-color: white;
-  padding: 5px;
-  margin-left: 10px;
-}
-
-/* footer {
-  background-color: #728ca6;
-  color: white;
-  height: 50%;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  position: relative;
+#note_editor_container {
   width: 100%;
-} */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#title {
+  visibility: hidden;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#note_editor {
+  width: 95%;
+  height: 350px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  resize: none;
+  background-color: azure;
+}
+
+#save_note {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#save_note:hover {
+  background-color: #333;
+}
