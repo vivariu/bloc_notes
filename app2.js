@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (addNote) {
     addNote.addEventListener("click", (event) => {
       event.preventDefault();
+      history.pushState(null, null, window.location.pathname);
       editNoteId = null;
       title.value = "";
       noteEditor.value = "";

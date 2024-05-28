@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       editNoteId = note.id;
       showEditor();
       loadNoteById(getNotes(), note.id);
-      history.pushState({ noteId: note.id }, null, `?id=${note.id}`); // met a jour l'url avec l'id lorsque click
+      history.pushState(null, null, `?id=${note.id}`); // met a jour l'url avec l'id lorsque click
     });
     li.appendChild(deleteButton);
     return li;
