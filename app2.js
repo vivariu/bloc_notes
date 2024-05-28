@@ -99,10 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (title && noteEditor) {
       const titleText = title.value.trim();
       const noteText = noteEditor.value.trim();
-      if (titleText == "" && noteText == "") {
-        hideEditor();
-        return;
-      }
+
       if (editNoteId) {
         if (titleText == "" && noteText == "") {
           deleteNoteById(editNoteId);
