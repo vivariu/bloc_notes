@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const addNote = document.getElementById("add_note");
-  const noteEditorContainer = document.getElementById("note_editor_container");
-  const notesContainer = document.getElementById("notes_container");
   const saveNote = document.getElementById("save_note");
   const noteList = document.getElementById("notes_list");
   const title = document.getElementById("title");
@@ -40,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     li.addEventListener("click", () => {
       editNoteId = note.id;
       loadNoteById(getNotes(), note.id);
+      history.pushState(null, null, `?id=${note.id}`);
     });
     li.appendChild(deleteButton);
     return li;
@@ -122,15 +121,10 @@ document.addEventListener("DOMContentLoaded", () => {
     saveNote.addEventListener("click", SaveNote);
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const liElements = document.querySelectorAll("#notes_list li");
-
-    liElements.forEach((li) => {
-      li.addEventListener("click", () => {
-        li.style.color = "red";
-      });
-    });
-  });
-
   loadNotes(getNotes());
+
+  const firstNote = document.querySelector("#notes_list li");
+  if (firstNote) {
+    firstNote.click();
+  }
 });

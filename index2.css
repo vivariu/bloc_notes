@@ -45,7 +45,7 @@ h1 {
   width: 300px;
   height: 40px;
   margin-bottom: 15px;
-  background-color: #f0f0f0;
+  background-color: white;
   border-radius: 10px;
   padding-left: 15px;
   padding-top: 15px;
@@ -58,7 +58,7 @@ h1 {
 }
 
 .delete-button {
-  font-size: larger;
+  font-size: large;
   border: none;
   cursor: pointer;
   border-radius: 50%;
@@ -125,4 +125,8 @@ h1 {
 
 #save_note:hover {
   background-color: #333;
+}
+
+.selected-note {
+  background-color: yellow; /* Changez la couleur selon votre préférence */
 }

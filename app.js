@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       editNoteId = note.id;
       showEditor();
       loadNoteById(getNotes(), note.id);
+      history.pushState({ noteId: note.id }, null, `?id=${note.id}`); // met a jour l'url avec l'id lorsque click
     });
     li.appendChild(deleteButton);
     return li;
@@ -53,6 +54,11 @@ document.addEventListener("DOMContentLoaded", () => {
     deleteButton.addEventListener("click", (event) => {
       event.stopPropagation();
       deleteNoteById(id);
+
+      if (editNoteId === id) {
+        showNoteList();
+        hideEditor();
+      }
     });
     return deleteButton;
   }
@@ -79,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setNotesToLocalStorage(notes);
     hideEditor();
     loadNotes(notes);
+    showNoteList();
   }
 
   function saveToLocalStorage(note) {
@@ -92,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setNotesToLocalStorage(notes);
     hideEditor();
     loadNotes(notes);
+    showNoteList();
   }
 
   function SaveNote() {
@@ -114,6 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function showNoteList() {
+    editNoteId = null;
+    history.pushState(null, null, window.location.pathname);
+  }
+
   function showEditor() {
     notesContainer.style.display = "none";
     noteEditorContainer.style.display = "block";
@@ -122,6 +135,33 @@ document.addEventListener("DOMContentLoaded", () => {
   function hideEditor() {
     notesContainer.style.display = "block";
     noteEditorContainer.style.display = "none";
+  }
+
+  window.addEventListener("popstate", (event) => {
+    // gère la navition dans l'historique, lorsque qu'on click sur les boutons suivant ou précédent l'app se met a jour
+    if (event.state && event.state.noteId) {
+      editNoteId = event.state.noteId;
+      showEditor();
+      loadNoteById(getNotes(), editNoteId);
+    } else {
+      editNoteId = null;
+      hideEditor();
+    }
+  });
+
+  if (window.location.search) {
+    // verification de l'url lors du chargement de la page, si Id present, la note est chargé sinon la page principale est chargé
+    const params = new URLSearchParams(window.location.search);
+    const noteId = params.get("id");
+    if (noteId) {
+      editNoteId = noteId;
+      showEditor();
+      loadNoteById(getNotes(), noteId);
+    } else {
+      hideEditor();
+    }
+  } else {
+    hideEditor();
   }
 
   if (addNote) {
