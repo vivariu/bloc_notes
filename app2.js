@@ -35,15 +35,22 @@ document.addEventListener("DOMContentLoaded", () => {
       ? note.title
       : note.text.split(" ").slice(0, 3).join(" ");
     li.textContent = saveText;
+
     li.addEventListener("click", () => {
+      document.querySelectorAll("li").forEach((id) => {
+        id.classList.remove("selected");
+      });
+
+      li.classList.add("selected");
+
       editNoteId = note.id;
       loadNoteById(getNotes(), note.id);
       history.pushState(null, null, `?id=${note.id}`);
     });
+
     li.appendChild(deleteButton);
     return li;
   }
-
   function createDeleteButton(id) {
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "x";
