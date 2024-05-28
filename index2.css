@@ -126,7 +126,3 @@ h1 {
 #save_note:hover {
   background-color: #333;
 }
-
-.selected-note {
-  background-color: yellow; /* Changez la couleur selon votre préférence */
-}

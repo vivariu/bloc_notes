@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     note.id = uniqId;
     notes[uniqId] = note;
     setNotesToLocalStorage(notes);
+    history.pushState(null, null, `?id=${note.id}`);
     loadNotes(notes);
   }
 
