@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="index2.css" />
   </head>
   <body>
@@ -17,21 +18,20 @@
       <header>
         <h1>My Notes</h1>
       </header>
-      <main>
-        <div id="notes_container">
-          <button id="add_note">+</button>
-          <ul id="notes_list"></ul>
-        </div>
+
+      <div class="notes_container">
+        <button class="add_note">+</button>
+        <ul class="notes_list"></ul>
+      </div>
     </div>
-    <div class="container">
-        <div id="note_editor_container">
-          <input id="title" type="text" placeholder="Title" />
-          <textarea id="note_editor" placeholder="..."></textarea>
-          <button id="save_note">OK</button>
-        </div>
+    <div class="container_create_note">
+      <div class="note_editor_container">
+        <input class="title" type="text" placeholder="Title" />
+        <textarea class="note_editor" placeholder="..."></textarea>
+        <button class="save_note">OK</button>
+      </div>
     </div>
-      </main>
-      <script type="module" src="app2.js"></script>
-  
+
+    <script src="app2.js"></script>
   </body>
 </html>

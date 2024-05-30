@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const addNote = document.getElementById("add_note");
-  const saveNote = document.getElementById("save_note");
-  const noteList = document.getElementById("notes_list");
-  const title = document.getElementById("title");
-  const noteEditor = document.getElementById("note_editor");
+  const addNote = document.querySelector(".add_note");
+  const saveNote = document.querySelector(".save_note");
+  const noteList = document.querySelector(".notes_list");
+  const title = document.querySelector(".title");
+  const noteEditor = document.querySelector(".note_editor");
+  const containerCreateNote = document.querySelector(".container_create_note");
+  const notesContainer = document.querySelector(".container");
 
   let allNotes = null;
   let editNoteId = null;
@@ -35,22 +37,19 @@ document.addEventListener("DOMContentLoaded", () => {
       ? note.title
       : note.text.split(" ").slice(0, 3).join(" ");
     li.textContent = saveText;
-
     li.addEventListener("click", () => {
-      document.querySelectorAll("li").forEach((id) => {
-        id.classList.remove("selected");
-      });
-
-      li.classList.add("selected");
-
       editNoteId = note.id;
       loadNoteById(getNotes(), note.id);
       history.pushState(null, null, `?id=${note.id}`);
+      if (window.innerWidth < 1365) {
+        containerCreateNote.style.display = "block";
+        notesContainer.style.display = "none";
+      }
     });
-
     li.appendChild(deleteButton);
     return li;
   }
+
   function createDeleteButton(id) {
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "x";
@@ -96,20 +95,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function SaveNote() {
-    if (title && noteEditor) {
-      const titleText = title.value.trim();
-      const noteText = noteEditor.value.trim();
-
-      if (editNoteId) {
-        if (titleText == "" && noteText == "") {
-          deleteNoteById(editNoteId);
-        } else {
-          saveNoteById(editNoteId, titleText, noteText);
-        }
-      } else {
-        const note = { title: titleText, text: noteText };
-        saveToLocalStorage(note);
-      }
+    if (!title || !noteEditor) return;
+    const titleText = title.value.trim();
+    const noteText = noteEditor.value.trim();
+    if (titleText === "" && noteText === "") {
+      if (editNoteId) deleteNoteById(editNoteId);
+      return;
+    }
+    if (editNoteId) {
+      saveNoteById(editNoteId, titleText, noteText);
+    } else {
+      const note = { title: titleText, text: noteText };
+      saveToLocalStorage(note);
+    }
+    title.value = "";
+    noteEditor.value = "";
+    if (window.innerWidth < 1365) {
+      containerCreateNote.style.display = "none";
+      notesContainer.style.display = "block";
     }
   }
 
@@ -120,11 +123,18 @@ document.addEventListener("DOMContentLoaded", () => {
       editNoteId = null;
       title.value = "";
       noteEditor.value = "";
+      if (window.innerWidth < 1365) {
+        containerCreateNote.style.display = "block";
+        notesContainer.style.display = "none";
+      }
     });
   }
 
   if (saveNote) {
-    saveNote.addEventListener("click", SaveNote);
+    saveNote.addEventListener("click", (event) => {
+      event.preventDefault();
+      SaveNote();
+    });
   }
 
   loadNotes(getNotes());
