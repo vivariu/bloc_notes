@@ -27,9 +27,9 @@
     <div class="container_create_note">
       <div class="note_editor_container">
         <input class="title" type="text" placeholder="Title" />
-        <div class="note_editor" placeholder="..." contenteditable="true"></div>
+        <div class="note_editor" contenteditable="true"></div>
         <div class="buttonContainer">
-          <button class="boldButton">B</button>
+          <button class="boldButton" onclick="bold()">Bold</button>
           <button class="italicButton">I</button>
           <button class="underlineButton">U</button>
         </div>
@@ -38,22 +38,10 @@
     </div>
 
     <script src="app2.js"></script>
-
     <script>
-      const bold = document.querySelector(".boldButton");
-      bold.addEventListener("click", () => {
-        document.execCommand("bold");
-      });
-
-      const italic = document.querySelector(".italicButton");
-      italic.addEventListener("click", () => {
-        document.execCommand("italic");
-      });
-
-      const underline = document.querySelector(".underlineButton");
-      underline.addEventListener("click", () => {
-        document.execCommand("underline");
-      });
+      function bold() {
+        const note = document.querySelector('.note_editor');
+        const bold = document.querySelector('boldButton');
     </script>
   </body>
 </html>
