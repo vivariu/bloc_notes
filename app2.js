@@ -36,7 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const saveText = note.title
       ? note.title
       : note.text.split(" ").slice(0, 3).join(" ");
-    li.textContent = saveText;
+
+    const textNode = document.createTextNode(stripHTML(saveText));
+    li.appendChild(textNode);
+
     li.addEventListener("click", () => {
       editNoteId = note.id;
       loadNoteById(getNotes(), note.id);
@@ -48,6 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     li.appendChild(deleteButton);
     return li;
+  }
+
+  // !!!!! Fonction pour supprimer les balises HTML du texte !!!!!!
+  function stripHTML(html) {
+    const tempElement = document.createElement("div");
+    tempElement.innerHTML = html;
+    return tempElement.textContent || tempElement.innerText || "";
   }
 
   function createDeleteButton(id) {
@@ -72,16 +82,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const note = notes[id];
     if (title && noteEditor && note) {
       title.value = note.title;
-      noteEditor.value = note.text;
+      noteEditor.innerHTML = note.text;
     }
   }
 
   function saveNoteById(id, titleText, noteText) {
     const notes = getNotes();
-    notes[id].title = titleText;
-    notes[id].text = noteText;
-    setNotesToLocalStorage(notes);
-    loadNotes(notes);
+    if (notes[id]) {
+      notes[id].title = titleText;
+      notes[id].text = noteText;
+      setNotesToLocalStorage(notes);
+      loadNotes(notes);
+    } else {
+      console.error("Note not found with ID:", id);
+    }
   }
 
   function saveToLocalStorage(note) {
@@ -97,9 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function SaveNote() {
     if (!title || !noteEditor) return;
     const titleText = title.value.trim();
-    const noteText = noteEditor.value.trim();
+    const noteText = noteEditor.innerHTML.trim();
     if (titleText === "" && noteText === "") {
-      if (editNoteId) deleteNoteById(editNoteId);
       return;
     }
     if (editNoteId) {
@@ -109,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
       saveToLocalStorage(note);
     }
     title.value = "";
-    noteEditor.value = "";
+    noteEditor.innerHTML = "";
     if (window.innerWidth < 1365) {
       containerCreateNote.style.display = "none";
       notesContainer.style.display = "block";
@@ -119,6 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (addNote) {
     addNote.addEventListener("click", (event) => {
       event.preventDefault();
+      if (title.value.trim() !== "" || noteEditor.innerHTML.trim() !== "") {
+      }
       history.pushState(null, null, window.location.pathname);
       editNoteId = null;
       title.value = "";
