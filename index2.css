@@ -152,6 +152,28 @@ h1 {
   box-shadow: 0 0 10px rgba(17, 17, 17, 0.9);
 }
 
+.buttonContainer {
+  display: flex;
+  padding: 10px;
+}
+
+.buttonContainer button {
+  margin-right: 10px;
+  background-color: transparent;
+}
+
+.boldButton {
+  font-weight: bolder;
+}
+
+.italicButton {
+  font-style: italic;
+}
+
+.underlineButton {
+  text-decoration: underline;
+}
+
 @media (max-width: 1365px) {
   .container_create_note {
     display: none;
