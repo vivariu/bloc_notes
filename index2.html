@@ -27,21 +27,15 @@
     <div class="container_create_note">
       <div class="note_editor_container">
         <input class="title" type="text" placeholder="Title" />
-        <div class="note_editor" contenteditable="true"></div>
+        <textarea class="note_editor" placeholder="Your note here"></textarea>
         <div class="buttonContainer">
-          <button class="boldButton" onclick="bold()">Bold</button>
+          <button class="boldButton">Bold</button>
           <button class="italicButton">I</button>
           <button class="underlineButton">U</button>
         </div>
         <button class="save_note">OK</button>
       </div>
     </div>
-
     <script src="app2.js"></script>
-    <script>
-      function bold() {
-        const note = document.querySelector('.note_editor');
-        const bold = document.querySelector('boldButton');
-    </script>
   </body>
 </html>

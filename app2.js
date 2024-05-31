@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const note = notes[id];
     if (title && noteEditor && note) {
       title.value = note.title;
-      noteEditor.innerHTML = note.text;
+      noteEditor.value = note.text;
     }
   }
 
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function SaveNote() {
     if (!title || !noteEditor) return;
     const titleText = title.value.trim();
-    const noteText = noteEditor.innerHTML.trim();
+    const noteText = noteEditor.value.trim();
     if (titleText === "" && noteText === "") {
       if (editNoteId) deleteNoteById(editNoteId);
       return;
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
       saveToLocalStorage(note);
     }
     title.value = "";
-    noteEditor.innerHTML = "";
+    noteEditor.value = "";
     if (window.innerWidth < 1365) {
       containerCreateNote.style.display = "none";
       notesContainer.style.display = "block";
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
       history.pushState(null, null, window.location.pathname);
       editNoteId = null;
       title.value = "";
-      noteEditor.innerHTML = "";
+      noteEditor.value = "";
       if (window.innerWidth < 1365) {
         containerCreateNote.style.display = "block";
         notesContainer.style.display = "none";

@@ -166,6 +166,10 @@ h1 {
   font-weight: bolder;
 }
 
+.boldMode {
+  font-weight: bold;
+}
+
 .italicButton {
   font-style: italic;
 }
